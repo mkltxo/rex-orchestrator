@@ -1,0 +1,11 @@
+
+     ▄▀▀▄
+    ▀▀▀▀▀▀
+   ▀▀▀▀▀▀▀▀
+  ▄▀▀    ▀▀▄
+ ▄▀▀      ▀▀▄
+
+ Welcome to the Antigravity CLI. You are currently not signed in.
+
+ ⣯  Signing in...
+agy ctx 0% · quota 0% · 7d 0% · quota 0.02% · 7d 0.38%

@@ -1,0 +1,8 @@
+#!/usr/bin/env -S python3 -I -S
+# Virtual-clock date: "+%s" prints the virtual clock; anything else runs the real date.
+import os, sys
+if sys.argv[1:] == ["+%s"]:
+    p = os.path.join(os.environ["FAKE_REX_DIR"], "clock")
+    print(int(float(open(p).read())) if os.path.exists(p) else 1800000000)
+else:
+    os.execv("/bin/date", ["/bin/date"] + sys.argv[1:])

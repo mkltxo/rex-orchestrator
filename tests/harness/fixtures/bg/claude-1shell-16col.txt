@@ -1,0 +1,24 @@
+  your turn
+  right away
+  replying
+  only:
+  started. When
+  it finishes,
+  reply only:
+  finished.
+
+  Ran 1 shell
+  command
+
+⏺ started
+
+✻ Cooked for 3s
+  · done 10:42
+  PM · 1 shell
+  still running
+
+────────────────
+❯ 
+────────────────
+
+  ⏵⏵ auto mode

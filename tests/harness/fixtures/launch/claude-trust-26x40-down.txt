@@ -1,0 +1,47 @@
+
+────────────────────────────────────────────────────────────────────────────────
+ Accessing workspace:
+
+ /private/tmp/claude-501/-Users-alice/00000000-0000-4000-8000-000000000000/scr──────────────────────────
+ Accessing workspace:
+
+ /private/tmp/claude-501/
+ -Users-alice/00000000-00
+ 00-4000-8000-00000000000
+ 0/scratchpad/audit/verif
+
+────────────────────────────────────────────────────────────────────────────────
+ Accessing workspace:
+
+ /private/tmp/claude-501/-Users-alice/00000000-0000-4000-8000-000000000000/scr
+──────────────────────────
+ Accessing workspace:
+
+ /private/tmp/claude-501/
+ -Users-alice/00000000-00
+ 00-4000-8000-00000000000
+ 0/scratchpad/audit/verif
+ y-R07-repro/live/c80x9
+
+ Quick safety check: Is
+ this a project you
+ created or one you
+ trust? (Like your own
+ code, a well-known open
+ source project, or work
+ from your team). If not,
+ take a moment to review
+ what's in this folder
+ first.
+
+ Claude Code'll be able
+ to read, edit, and
+ execute files here.
+
+ Security guide
+
+   No, exit
+ ❯ Yes, I trust this
+   folder
+ Enter to confirm · Esc
+ to cancel

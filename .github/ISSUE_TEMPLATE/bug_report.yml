@@ -1,0 +1,32 @@
+name: Bug report
+description: Something rex-orchestrator did wrong or refused unexpectedly
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "Security issues (a guard or cage bypass): please use private reporting instead, see SECURITY.md."
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: The command you ran, its exit code and output, and what you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: screen
+    attributes:
+      label: Child screen
+      description: "Output of `rex-orchestrator screen BLOCK 40` at the moment it went wrong (remove anything private)."
+      render: text
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: "macOS, `rex version`, the agent (`claude --version`, …), bash (`bash --version`)"
+    validations:
+      required: true
+  - type: dropdown
+    id: orchestrator
+    attributes:
+      label: Orchestrating agent
+      options: [Claude Code, Codex, Grok, Gemini, Other]

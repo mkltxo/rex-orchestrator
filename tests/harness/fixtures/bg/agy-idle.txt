@@ -1,0 +1,4 @@
+ ✦ Done.
+
+ > Type your message
+ ~/rex-selftest/agy   gemini-3-pro

@@ -1,0 +1,16 @@
+name: Feature or agent request
+description: A new capability, or support for another agent
+labels: [enhancement]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What do you want to do?
+      description: The workflow you're trying to run and where the tool gets in the way.
+    validations:
+      required: true
+  - type: textarea
+    id: agent
+    attributes:
+      label: For a new agent
+      description: Its CLI name, whether it reports Rex program status (OSC 7501), and captures of its trust/startup dialogs.

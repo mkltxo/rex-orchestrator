@@ -1,0 +1,24 @@
+  ).write("BG")' .
+  Then end your
+  turn immediately,
+  replying only
+  the word started.
+  Do not wait for
+  it and do not
+  check on it.
+
+  Ran 1 shell
+  command
+
+⏺ started
+
+✻ Baked for 6s ·
+  done 2:55 PM · 1
+  shell still
+  running
+  ◐ medium · /eff…
+────────────────────
+❯ 
+────────────────────
+
+  ⏸ manual mode on

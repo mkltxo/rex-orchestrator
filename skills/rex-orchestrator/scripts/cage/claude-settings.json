@@ -1,0 +1,29 @@
+{
+  "sandbox": {
+    "enabled": false
+  },
+  "disableClaudeAiConnectors": true,
+  "skipDangerousModePermissionPrompt": true,
+  "permissions": {
+    "allow": [
+      "Bash",
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "NotebookEdit",
+      "WebFetch",
+      "WebSearch",
+      "Agent",
+      "TodoWrite",
+      "TaskOutput",
+      "KillShell",
+      "Skill",
+      "ToolSearch",
+      "Monitor",
+      "TaskStop",
+      "SendMessage"
+    ]
+  }
+}

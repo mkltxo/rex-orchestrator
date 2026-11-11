@@ -1,0 +1,12 @@
+Do you trust this wo
+Workspace:
+/private/tmp/claude-
+hpad/audit/review-la
+
+Trusting allows proj
+before the model run
+Only trust this work
+⟩ 1  Trust and conti
+  2  Quit
+
+Use Up/Down or 1/2, 

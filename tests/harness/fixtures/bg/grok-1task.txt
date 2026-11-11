@@ -1,0 +1,14 @@
+                                                                               █
+     Started.                                                        1:56 PM   █
+                                                                               █
+     Worked for 6.9s                                                           █
+                                                                               █
+
+   ▾ Tasks 1
+   ⁙ Run Sleep 20 seconds in the background                                 3s
+
+  ╭──────────────────────────────────────────────────────────────────────────╮
+  │ ❯                                                                        │
+  ╰─────────────────────────────────────── Grok 4.7 (high) · always-approve ─╯
+
+  Shift+Tab:mode  │  Ctrl+.:shortcuts

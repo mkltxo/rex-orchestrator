@@ -1,0 +1,5 @@
+
+  [… 3 lines]
+› 1. Review hooks
+  2. Trust all and continue
+  enter confirm · esc skip

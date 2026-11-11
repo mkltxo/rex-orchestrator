@@ -1,0 +1,8 @@
+• hi
+
+  Worked for 5s • 3:31 PM
+
+› Stop the build; press esc to cancel it if it hangs. Do you want to retry?
+
+  GPT-6-Astra high · ~/proj
+  ? for shortcuts                                     ⚠ 9 warnings · f2 to view

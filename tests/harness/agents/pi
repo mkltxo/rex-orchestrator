@@ -1,0 +1,3 @@
+#!/bin/sh
+# A stub: the harness only needs launch to find it on PATH (the fake rex runs nothing).
+exit 0

@@ -1,0 +1,13 @@
+                                                                               █
+     Worked for 11s                                                            █
+                                                                               █
+     ◆ Task completed in 20s: Sleep 20 seconds in the background               █
+                                                                               █
+
+   ⠦ Waiting…                                                           [stop]
+
+  ╭──────────────────────────────────────────────────────────────────────────╮
+  │ ❯                                                                        │
+  ╰─────────────────────────────────────── Grok 4.7 (high) · always-approve ─╯
+
+  Shift+Tab:mode  │  Ctrl+c:cancel  │  Ctrl+.:shortcuts

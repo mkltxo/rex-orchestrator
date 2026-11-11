@@ -1,0 +1,23 @@
+
+  /p/t/c/-/c/s/f/l/fix-core/grok                      39K / 256K │ [Dashboard]
+
+
+     ❯ Run the shell command echo hi, then reply with only its       3:32 PM
+       output.
+
+
+     I'll run that command and reply with only its output.           3:32 PM
+
+     ◆ Ran print hi to stdout
+
+     hi                                                              3:32 PM
+
+     Worked for 4.8s
+
+
+
+  ╭──────────────────────────────────────────────────────────────────────────╮
+  │ ❯ Run the shell command echo hi, then reply with only its             │
+  ╰─────────────────────────────────────── Grok 4.7 (high) · always-approve ─╯
+
+  Shift+Tab:mode  │  Ctrl+.:shortcuts

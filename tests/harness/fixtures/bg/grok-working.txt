@@ -1,0 +1,9 @@
+     Start the shell command `python3 ...` in the background ...
+
+   ⠧ Thinking…                                                          [stop]
+
+  ╭──────────────────────────────────────────────────────────────────────────╮
+  │ ❯                                                                        │
+  ╰─────────────────────────────────────── Grok 4.7 (high) · always-approve ─╯
+
+  Shift+Tab:mode  │  Ctrl+c:cancel  │  Ctrl+.:shortcuts

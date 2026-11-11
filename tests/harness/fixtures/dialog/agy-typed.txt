@@ -1,0 +1,22 @@
+
+
+      ▄▀▀▄
+     ▀▀▀▀▀▀
+    ▀▀▀▀▀▀▀▀
+   ▄▀▀    ▀▀▄
+  ▄▀▀      ▀▀▄
+
+  Antigravity CLI 1.4.12
+  user@example.com (Google AI Ultra)
+  Gemini 4 Argon (Medium)
+  /private/tmp/x/proj
+
+⚠ Warning
+  ⎿  "Gemini 3.1 Pro (Low)" is no longer available. Using "Gemini 4 Argon
+     (Medium)".
+
+────────────────────────────────────────────────────────────────────────────────
+> Create the file /private/tmp/x/proj/a.txt
+────────────────────────────────────────────────────────────────────────────────
+? for shortcuts                                          Gemini 4 Argon · medium
+agy ctx 0% · quota 0% · 7d 0% · quota 0.32% · 7d 0.45%

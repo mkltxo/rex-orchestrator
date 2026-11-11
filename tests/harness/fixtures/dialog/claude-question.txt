@@ -1,0 +1,24 @@
+
+  Ran 1 shell command
+
+⏺ DONE
+
+✻ Cogitated for 5s · done 12:02 PM · 1 shell still running
+
+❯ Use the AskUserQuestion tool to ask me exactly one question, 'Pick a color',
+  with exactly two options: red and blue. After I answer, reply with the chosen
+  color only. Use no other tools.
+────────────────────────────────────────────────────────────────────────────────
+ ☐ Color
+
+Pick a color
+
+❯ 1. red
+     Red
+  2. blue
+     Blue
+  3. Type something.
+────────────────────────────────────────────────────────────────────────────────
+  4. Chat about this
+
+Enter to select · ↑/↓ to navigate · Esc to cancel

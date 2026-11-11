@@ -1,0 +1,9 @@
+
+  Muse Code 1.4.14
+
+  Skills: 120 loaded · 1 warning (ctrl+o to expand)
+
+── Voice input (⌥ + v to start) ────────────────────────────────────────────────
+❯ Create the file /private/tmp/x/proj/a.txt
+────────────────────────────────────────────────────────────────────────────────
+  muse-wonder-1.0 · medium · /p/t/x/proj · Auto-review

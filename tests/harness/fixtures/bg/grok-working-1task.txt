@@ -1,0 +1,13 @@
+     ◆ Task started: Sleep 20 seconds in the background                        █
+                                                                               █
+
+   ⠋ Waiting for response… 0.4s                            10.0s ⇣39.9k [stop]
+
+   ▾ Tasks 1
+   ⋅ Run Sleep 20 seconds in the background                                 0s
+
+  ╭──────────────────────────────────────────────────────────────────────────╮
+  │ ❯                                                                        │
+  ╰─────────────────────────────────────── Grok 4.7 (high) · always-approve ─╯
+
+  Shift+Tab:mode  │  Ctrl+c:cancel  │  Ctrl+.:shortcuts

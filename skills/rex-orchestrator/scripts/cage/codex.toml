@@ -1,0 +1,31 @@
+# rex-orchestrator cage: codex CODEX_HOME/config.toml template.
+# Copied into the cage home at launch; the cage denies writes to it, so the agent
+# cannot switch connectors, hooks or MCP servers back on. No model is pinned here;
+# pass -m to the agent for a cheap model. auth.json is a symlink the wrapper adds.
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
+check_for_update_on_startup = false
+
+[features]
+apps = false
+plugins = false
+remote_plugin = false
+plugin_discovery_prefetch = false
+hooks = false
+memories = false
+chronicle = false
+daemon_auto_start = false
+browser_use = false
+browser_use_external = false
+in_app_browser = false
+computer_use = false
+skill_mcp_dependency_install = false
+in_app_updates = false
+
+[tui]
+screen_reader_detection_done = true
+
+# Preserve native subagents; do not impose a smaller concurrency limit here.
+# max_depth is intentionally omitted so Codex retains its native default.
+[agents]
+max_concurrent_threads_per_session = 16

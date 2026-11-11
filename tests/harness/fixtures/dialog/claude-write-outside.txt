@@ -1,0 +1,17 @@
+⏺ Write(/private/tmp/claude-501/-Users-alice/00000000-0000-4000-80…/outside.txt)
+
+────────────────────────────────────────────────────────────────────────────────
+ Create file
+ ../out/outside.txt
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+  1 x
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ Do you want to create outside.txt?
+ ❯ 1. Yes
+   2. Yes, and switch to accept edits (auto-approve file edits and common file
+      commands) for this session; Yes, and always allow access to
+      /private/tmp/claude-501/-Users-alice/00000000-0000-4000-8000-000000000000/
+      scratchpad/fix/live/fix-approve/claude/out for this session (shift+tab)
+   3. No
+
+ Esc to cancel · Tab to amend

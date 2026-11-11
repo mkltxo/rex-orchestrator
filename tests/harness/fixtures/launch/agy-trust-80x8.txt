@@ -1,0 +1,8 @@
+Accessing workspace:
+
+/private/tmp/claude-501/-Users-alice/00000000-0000-4000-8000-
+000000000000/scratchpad/audit/verify-R07-trace/t4-agy-80x8
+
+Do you trust the contents of this project?
+
+Antigravity CLI requires permission to read, edit, and execute files here.

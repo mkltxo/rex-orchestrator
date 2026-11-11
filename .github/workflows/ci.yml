@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install tools
+        run: brew install shellcheck
+      - name: shellcheck
+        run: |
+          shellcheck install.sh tests/install_test.sh skills/rex-orchestrator/scripts/rex-orchestrator.sh
+          shellcheck -S warning tests/harness/run.sh tests/harness/unit.sh tests/cage/zt.sh
+      - name: Python compiles
+        run: python3 -m py_compile skills/rex-orchestrator/scripts/harvest.py tests/harness/*.py
+
+  test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install tools
+        run: brew install bash jq
+      - name: Installer tests
+        run: tests/install_test.sh
+      - name: Harness (fake rex, bash 3.2 and 5)
+        run: tests/harness/run.sh
+      - name: Cage profile (zero tokens)
+        run: tests/cage/zt.sh

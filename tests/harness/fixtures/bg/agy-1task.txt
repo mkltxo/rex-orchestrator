@@ -1,0 +1,4 @@
+ ✦ Started the command in the background.
+
+ > Type your message
+ ~/rex-selftest/agy   1 task(s)   gemini-3-pro

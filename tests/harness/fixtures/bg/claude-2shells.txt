@@ -1,0 +1,11 @@
+⏺ Bash(python3 -c 'import time; time.sleep(20)')
+  ⎿  Running in the background (↓ to manage)
+
+⏺ started
+
+────────────────────────────────────────────────────────────────────────────────
+❯ 
+────────────────────────────────────────────────────────────────────────────────
+  2 shells still running · ↓ to view
+  ◐ medium · /effort
+  ⏸ manual mode on (shift+tab to cycle)

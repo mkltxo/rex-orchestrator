@@ -1,0 +1,14 @@
+⏺ started
+
+────────────────────────────────────────────────────────────────────────────────
+❯ 
+────────────────────────────────────────────────────────────────────────────────
+  1 shell still running · ↓ to view
+  ◐ medium · /effort
+  ⏸ manual mode on (shift+tab to cycle)
+  ✗ 2 MCP servers failed · /mcp
+  Context left until auto-compact: 9%
+  ✓ Update installed · Restart to apply
+  Tip: Use /statusline to customise
+  IDE: Zed connected
+  Opus 5.5 · ~/proj

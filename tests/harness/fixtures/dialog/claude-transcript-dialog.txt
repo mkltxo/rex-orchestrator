@@ -1,0 +1,9 @@
+⏺ The child showed:
+ ❯ 1. Yes
+   2. No
+ Do you want to proceed? Esc to cancel
+
+────────────────────────────────────────────────────────────────────────────────
+❯ 1. draft that starts with a number
+────────────────────────────────────────────────────────────────────────────────
+  ⏸ manual mode on

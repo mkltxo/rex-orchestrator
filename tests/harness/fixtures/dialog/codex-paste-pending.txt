@@ -1,0 +1,24 @@
+
+  >_ OpenAI Codex (v0.166.0)
+     /private/tmp/rx-probe/codex
+  permissions: YOLO mode
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+› Ask Codex to do anything
+
+  GPT-6.1-Sol default · /private/tmp/rx-probe/codex
+  ? for shortcuts                                      ⚠ 1 warning · f2 to view

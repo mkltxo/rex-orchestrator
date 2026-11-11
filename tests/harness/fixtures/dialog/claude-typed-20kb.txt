@@ -1,0 +1,9 @@
+ ▐▛███▛█   Claude Code v2.1.316
+▝▜██████▀  Haiku 5.5 · Claude API
+ ▝▝   ▝▝   /private/tmp/rx-probe/claude
+
+
+────────────────────────────────────────────────────────────────────────────────
+❯ gnore it. Context line, ignore it. Context line, ignore it.
+────────────────────────────────────────────────────────────────────────────────
+  paste again to expand                           Ctrl+Y to paste deleted text

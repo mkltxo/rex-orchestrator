@@ -1,0 +1,3 @@
+⏺ Using the v2 shell wrapper.
+❯ 
+  ? for shortcuts

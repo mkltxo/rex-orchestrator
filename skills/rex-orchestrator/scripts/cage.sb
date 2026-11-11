@@ -1,0 +1,248 @@
+(version 1)
+; rex-orchestrator cage: the sandbox-exec profile a caged child runs under.
+; Default-allow, then: writes only to DIR, the child's own cage home and terminal devices; no reads of secret
+; stores, agent homes or other cage homes; web ports only; no signals out; mach-lookup default-deny with a 7-name
+; allowlist; no IOKit user clients; and write locks on the files under DIR that run unsandboxed later.
+;
+; Invoke as:
+;   sandbox-exec -D DIR=<task folder> -D DIR_RE=<DIR, ERE metacharacters \-escaped> \
+;     -D CAGE_TMP=<cage temp dir> -D HOME=<real home> \
+;     -D AGENT_AUTH=<one real-home credential file to re-open, or CAGE_TMP for none> \
+;     -D AGENT_CFG_RO=<one cage file to write-lock, or an unused CAGE_TMP path> \
+;     -D LOCK_RE=<anchored ERE of the paths run or sourced outside the cage, see its rule> \
+;     -D CAGE_ROOT=<the folder holding every cage home, the parent of CAGE_TMP> \
+;     -D TTY=<the child's own pty, /dev/ttysNNN, or an unused CAGE_TMP path for none> \
+;     -D CAGE_SECRETS=<the cage credentials folder, read- and write-denied> \
+;     [-D HOOKSPATH=<a repo core.hooksPath resolving inside DIR, to write-lock>] \
+;     -f cage.sb <real agent binary> <args...>
+; DIR, DIR_RE, CAGE_TMP, CAGE_ROOT, TTY, HOME, AGENT_AUTH, AGENT_CFG_RO, LOCK_RE and CAGE_SECRETS are required: a missing one makes
+; the profile fail to load (rc 65), i.e. fail closed. DIR_RE is DIR with ( ) [ ] { } . ^ $ * + ? | \
+; each backslash-escaped, so the DIR-plant regexes below match DIR literally whatever its path holds
+; (rex-orchestrator.sh computes it and refuses a DIR with a control character, which a regex can't express).
+; HOOKSPATH is OPTIONAL: without it only the extra lock on a custom in-DIR core.hooksPath is skipped; .git/hooks, .husky and .githooks stay locked. An empty -D HOOKSPATH=
+; fails to load; a relative one silently matches nothing.
+;
+; Every -D path must be PHYSICAL (pwd -P): seatbelt matches resolved paths, so a path through a
+; symlink (/var -> /private/var, /tmp) or with "//" never matches. For DIR/CAGE_TMP/HOOKSPATH that
+; only breaks the agent (writes denied); for HOME it would silently void every read deny below.
+; DIR_RE is the escaped form of the same physical DIR. rex-orchestrator.sh canonicalizes all of them.
+;
+; -D HOME is always the REAL home: the deny rules below are built from it. An agent that
+; needs an isolated HOME (grok, agy) sets HOME only in its process environment; -D HOME
+; stays real so the denies still cover the user's real secrets and agent homes.
+;
+; The ONLY writes allowed outside DIR are under CAGE_TMP (the agent's own isolated config,
+; state, home and temp) and the terminal devices, each justified inline. Nothing else is
+; writable. The only reads opened outside the default set are the single AGENT_AUTH file.
+
+(allow default)
+
+; ---- Writes: only the task folder, the cage temp dir, and terminal devices. ----
+(deny file-write*)
+(allow file-write*
+  (subpath (param "DIR"))        ; task output folder - the point of the cage
+  (subpath (param "CAGE_TMP"))   ; agent's isolated config/state/home/temp; never a real home
+  (literal "/dev/null") (literal "/dev/zero") (literal "/dev/tty") (literal "/dev/ptmx")
+  (literal "/dev/dtracehelper")
+  (literal (param "TTY"))        ; the child's own pty
+  ; Any pty, so sub-ptys a tool opens itself (python pty, script, node-pty) work: narrowing to TTY alone breaks them
+  ; ("out of pty devices"). Residual risk: a child can print onto another
+  ; pane's screen; it cannot inject input there (TIOCSTI is blocked on macOS), so never trust a screen on its own.
+  (regex #"^/dev/ttys[0-9]+$")
+  (regex #"^/dev/fd/"))
+; Re-lock inside CAGE_TMP (after its allow, so these denies win): the wrapper the agent was
+; started from, and one config file (codex: codex-home/config.toml, which pins connectors/
+; hooks/MCP off; claude: claude-config/settings.json). Harmless when AGENT_CFG_RO is unused.
+(deny file-write*
+  (literal (param "AGENT_CFG_RO"))
+  (subpath (string-append (param "CAGE_TMP") "/bin")))
+; What runs or is sourced OUTSIDE the cage stays write-locked even when DIR holds it (after the DIR
+; allow, so this deny wins): the cage secrets (the claude wrapper sources claude-<name>.env before
+; sandbox-exec) and the launcher's own skill folder (rex-orchestrator.sh, this profile, the templates,
+; SKILL.md). LOCK_RE matches each and everything below it, as given and as resolved: seatbelt sees
+; resolved paths only, and the given form keeps a DIR that holds a link from swapping it.
+(deny file-write* (regex (param "LOCK_RE")))
+
+; ---- DIR auto-run plant defence. ----
+; A caged agent writes DIR by design, but some files there execute UNSANDBOXED the next time DIR
+; is opened uncaged (a git op, direnv, an agent/editor, a package install). Deny WRITING those
+; specific auto-run paths under DIR while leaving ordinary source writes allowed. Anchored to the
+; DIR_RE param (DIR with its ERE metacharacters escaped, not unanchored) so the caged agent's own
+; config under CAGE_TMP (grok ~/.grok, agy ~/.gemini, codex-home) stays writable, and so the locks
+; still hold for a DIR path containing regex metacharacters. After the DIR allow: seatbelt is last-match-wins.
+; This is a speed bump, not a boundary: a writable tree still permits symlink / gitdir-file reroutes
+; (docs/cage.md tells the orchestrator to review DIR's diff before ever using DIR uncaged). Breaks, by
+; design: `git init`, `git config`, `git remote add` (they write .git/config), and writing a
+; .vscode/.claude/etc. config as a deliverable. Verified: 41/41 plant writes denied (incl. create-
+; then-rename, hardlink, mv-dir, symlink-hooks, delete/truncate/append an existing hook) and all
+; ordinary writes (src, README, .github/workflows, .gitignore, package.json, venv, add/commit on a
+; pre-existing repo) allowed.
+(deny file-write*
+  (regex (string-append (param "DIR_RE") "/(.*/)?\.git/hooks(/|$)"))
+  (regex (string-append (param "DIR_RE") "/(.*/)?\.git/config"))
+  (regex (string-append (param "DIR_RE") "/(.*/)?\.git/config\.worktree"))
+  (regex (string-append (param "DIR_RE") "/(.*/)?\.envrc$"))
+  (regex (string-append (param "DIR_RE") "/(.*/)?\.mcp\.json$"))
+  (regex (string-append (param "DIR_RE") "/(.*/)?\.(claude|codex|gemini|grok|cursor|zed|vscode|idea)/"))
+  ; agy auto-loads DIR/.agents as instructions (skills, rules): a plant there steers the next agy run in DIR, caged
+  ; or not. Denied outright, the entry itself too (/|$), not only what is below it: the cage cannot tell "created by
+  ; the task" from "planted", so a task that needs a .agents folder has the user make it. Reading stays allowed.
+  (regex (string-append (param "DIR_RE") "/(.*/)?\.agents(/|$)"))
+  (regex (string-append (param "DIR_RE") "/(.*/)?\.husky(/|$)"))
+  (regex (string-append (param "DIR_RE") "/(.*/)?\.githooks(/|$)")))
+; A repo's custom core.hooksPath inside DIR (the launcher resolves it uncaged). Optional, see header.
+(when (param "HOOKSPATH")
+  (deny file-write* (subpath (param "HOOKSPATH"))))
+; What runs or is read uncaged, write-denied even when DIR is, holds or sits in it (after the DIR
+; allow, so this deny wins). launch refuses such a DIR; this is the cage's own copy of that rule: the
+; cage credentials, ssh, the bins and skills every session runs, launchd's agents, Homebrew and the
+; apps, and every agent home by prefix. CAGE_TMP sits under rex-orchestrator' state dir, which is not here
+; (no write outside DIR and CAGE_TMP is allowed in the first place).
+(deny file-write*
+  (subpath (param "CAGE_SECRETS"))
+  (subpath (string-append (param "HOME") "/.ssh"))
+  (subpath (string-append (param "HOME") "/.local/bin"))
+  (subpath (string-append (param "HOME") "/.agents"))
+  (subpath (string-append (param "HOME") "/Library/LaunchAgents"))
+  (prefix (string-append (param "HOME") "/.claude"))
+  (prefix (string-append (param "HOME") "/.codex"))
+  (prefix (string-append (param "HOME") "/.grok"))
+  (prefix (string-append (param "HOME") "/.gemini"))
+  (subpath "/opt/homebrew")
+  (subpath "/Applications"))
+
+; ---- Reads: no secrets, no other agents' homes, no other sessions' scratchpads. ----
+; A blocklist: every other file under HOME stays readable (other dotfiles, ~/Library/Application
+; Support but the agent folders below). docs/cage.md lists the same set.
+; Other repos: a child sees DIR's repo and no other under ~/Repos (their code, .env files, history). file-read-data,
+; not file-read*: contents and listings go, while stat still works, so realpath/getcwd/git walking up from a DIR in
+; ~/Repos keep working (a DIR below a repo root can't read that root's .git, so git sees no repo there: caged tasks
+; get their own folder or the repo root). Before the block below, so its explicit denies still win for a DIR that is
+; one of them; DIR is re-opened (data only) right after.
+(deny file-read-data (subpath (string-append (param "HOME") "/Repos")))
+;; Every cage home sits under CAGE_ROOT: a child must not read another child's (its config, history, scratch files, and
+;; a sibling's copy of agy's login). file-read-data, not file-read*: a full deny breaks chdir into the child's own home
+;; below it. Its own CAGE_TMP is re-opened after the denies, below.
+(deny file-read-data (subpath (param "CAGE_ROOT")))
+(allow file-read-data (subpath (param "DIR")))
+(deny file-read*
+  ; Secret stores.
+  (subpath (param "CAGE_SECRETS"))                                 ; the cage credentials themselves
+  (subpath (string-append (param "HOME") "/.ssh"))
+  (subpath (string-append (param "HOME") "/.aws"))
+  (subpath (string-append (param "HOME") "/.gnupg"))
+  ; Every CLI's own config and tokens (gh, rclone, gcloud, anthropic, configstore, ...); git's
+  ; folder is re-opened below.
+  (subpath (string-append (param "HOME") "/.config"))
+  (subpath (string-append (param "HOME") "/.cloudflared"))         ; tunnel credentials
+  (subpath (string-append (param "HOME") "/.mcp-auth"))            ; MCP OAuth tokens
+  (subpath (string-append (param "HOME") "/.supabase"))
+  (literal (string-append (param "HOME") "/.netrc"))
+  (literal (string-append (param "HOME") "/.zsh_history"))         ; typed commands, tokens included
+  (literal (string-append (param "HOME") "/.bash_history"))
+  (subpath (string-append (param "HOME") "/.zsh_sessions"))
+  (subpath (string-append (param "HOME") "/Library/Keychains"))  ; every agent's login token is here
+  (subpath (string-append (param "HOME") "/Library/Messages"))
+  (subpath (string-append (param "HOME") "/Library/Mail"))
+  ; Every agent's real config home (tokens, history, trust, MCP OAuth, plaintext credentials).
+  ; The caged agent runs from an isolated config under CAGE_TMP, so it needs nothing here
+  ; except at most one auth file, re-opened by AGENT_AUTH below. By prefix, so second accounts,
+  ; backups and companions count too: ~/.claude-work, ~/.claude.json.backup, ~/.codex-old,
+  ; ~/.grokbot, ...
+  (prefix (string-append (param "HOME") "/.claude"))
+  (prefix (string-append (param "HOME") "/.codex"))
+  (prefix (string-append (param "HOME") "/.grok"))
+  (prefix (string-append (param "HOME") "/.gemini"))
+  (subpath (string-append (param "HOME") "/.cursor"))
+  (subpath (string-append (param "HOME") "/.copilot"))
+  (subpath (string-append (param "HOME") "/.hermes"))
+  (subpath (string-append (param "HOME") "/.pi"))
+  (subpath (string-append (param "HOME") "/.mastracode"))
+  (subpath (string-append (param "HOME") "/Library/Application Support/Claude"))  ; the Claude app: MCP env tokens
+  (subpath (string-append (param "HOME") "/Library/Application Support/Codex"))
+  (subpath (string-append (param "HOME") "/Library/Application Support/com.openai.codex"))
+  (subpath (string-append (param "HOME") "/Library/Application Support/Muse")))
+; git stops with a fatal error on a config it can't read: re-open its own folder.
+(allow file-read* (subpath (string-append (param "HOME") "/.config/git")))
+; Re-open exactly ONE real-home credential file, for agents that read auth in place:
+;   codex -> ${CODEX_HOME:-HOME/.codex}/auth.json   grok -> HOME/.grok/auth.json
+; For claude/agy, AGENT_AUTH is CAGE_TMP (already readable), so this opens nothing new.
+; RISK: whichever agent this is for can read its own OAuth/refresh token and reach the net
+; on 443, so it could use or exfiltrate it. Replace with a cage-only login to remove this.
+(allow file-read* (literal (param "AGENT_AUTH")))
+; The child's own cage home, read back open after every deny above (it sits under CAGE_ROOT, and under an agent-home
+; prefix when REX_ORCHESTRATOR_STATE_DIR points there). Siblings stay denied: they are other CAGE_ROOT entries.
+(allow file-read* (subpath (param "CAGE_TMP")))
+; Claude Code sessions keep scratch files under /private/tmp/claude-<uid>: hide their contents, keep own.
+(deny file-read-data (regex #"^/private/tmp/claude-[0-9]+(/|$)"))
+(allow file-read-data (subpath (param "DIR")) (subpath (param "CAGE_TMP")))
+
+; ---- Exec: the obvious escapes. Path denies are only a speed bump: a copy has another path,
+;      and only ENTITLED Apple binaries (launchctl/osascript/sudo/ssh) are amfi-Killed:9 on copy
+;      -- a generic signed binary and a self-compiled ad-hoc one BOTH run. Containment comes from
+;      the file / network / mach / iokit denies below, never from code signing. ----
+(deny process-exec
+  (literal "/usr/bin/sudo") (literal "/bin/launchctl") (literal "/usr/bin/osascript") (literal "/usr/bin/open")
+  (literal "/usr/bin/ssh") (literal "/usr/bin/scp") (literal "/usr/bin/sftp")
+  (literal "/usr/bin/crontab") (literal "/usr/bin/at") (literal "/usr/bin/batch"))
+
+; ---- Network: web ports + DNS only. Default-deny blocks every self-host service (Rex 58903,
+;      local MCP servers and app APIs), the Rex and ssh-agent unix sockets,
+;      cross-host ssh, and every other non-web port on any host. 443 to any host stays open
+;      for the model API, so egress exfil over 443/80 is an inherent residual. ----
+(deny network-outbound)
+(allow network-outbound (remote ip "*:443") (remote ip "*:80") (remote ip "*:53"))
+(allow network-outbound (remote unix-socket (path-literal "/private/var/run/mDNSResponder")))  ; getaddrinfo/curl DNS
+
+; ---- Signals: only within the cage. A caged process must not SIGKILL Rex, other agents or apps.
+;      Verified for grok; low risk for the others (these TUIs do not signal outside their own tree). ----
+(deny signal)
+(allow signal (target same-sandbox))
+
+; ---- Mach services: DEFAULT-DENY with a 7-name allowlist. ----
+; Under (allow default) alone, which covers mach-lookup, a Mach-O compiled in-cage
+; (ad-hoc signed, not amfi-killed) reached com.apple.coreservices.launchservicesd,
+; com.apple.CoreServices.coreservicesd, com.apple.coreservices.appleevents, com.apple.lsd.mapdb
+; and com.apple.pasteboard.1 -- i.e. it could launch an app or open a URL as a NEW process
+; outside the cage, or read/write the clipboard. We now deny every mach-lookup and allow back
+; only the 7 names a live test proved real work needs. launchservicesd / coreservicesd /
+; appleevents / lsd.* / pasteboard.1 / tccd / windowserver / authd / pbs stay DENIED (nothing in
+; the dangerous-service inventory is reachable except SecurityServer, see its line), verified
+; tolerated by live codex and grok turns and by machprobe reachability (rc 0 -> 1100).
+;
+; Discovery method: run the dev battery and each
+; agent under a blanket (deny mach-lookup) and read launchd "denied lookup" via /usr/bin/log,
+; then trust each program's own exit/error. The SBPL (trace "<file>") directive is accepted on
+; macOS 27 but writes no file, and the (with report) modifier is rejected, so the launchd log
+; plus the program errors are the method that actually works on this build.
+;
+; FINDING: the whole dev-tool battery -- git add/commit/status/diff/log, python3 -c, venv + run,
+; node -e, npm, clang -o + run, swift, uv, brew, jq, rg, curl https AND python3 urllib https with
+; cert verification -- needs ZERO of these (every mach lookup degrades cleanly). The 7 names below
+; are required ONLY by the agents' account bootstrap + HTTPS: codex fails its TUI bootstrap
+; ("load workspace requirements" / "workspace routing discovery") without them; with them codex
+; and grok complete a full write+shell+fetch turn, and claude reaches its prompt / agy its login.
+;
+; NONE of the 7 can open an app or URL, run a job, post input events, read the screen or the
+; clipboard, or prompt for privileges. The two security-framework names are the one caveat and
+; are flagged inline: they are needed for TLS cert validation to the model API, and are safe
+; here only because the keychain FILES stay read-denied above (Library/Keychains), so securityd/
+; trustd cannot hand the cage a keychain item by IPC (verified: the security CLI gets err 44).
+(deny mach-lookup)
+(allow mach-lookup
+  (global-name "com.apple.system.opendirectoryd.libinfo")          ; getpwuid + getaddrinfo user/host resolution (libc); codex bootstrap needs it
+  (global-name "com.apple.system.opendirectoryd.membership")       ; group-membership half of the same libinfo resolution
+  (global-name "com.apple.SystemConfiguration.configd")            ; SCDynamicStore proxy/DNS config the HTTPS client reads (matters under VPN/privoxy)
+  (global-name "com.apple.SystemConfiguration.DNSConfiguration")   ; DNS resolver-config half of the above
+  (global-name "com.apple.SystemConfiguration.NetworkInformation") ; reachability-flags half of the above
+  ; --- security framework: TLS trust only. FLAG: sensitive. These rank as dangerous
+  ;     (keychain over IPC), but live codex dies without them (TLS to chatgpt.com) and they are
+  ;     safe here ONLY because the keychain files stay read-denied, so neither returns a keychain
+  ;     item to the cage. securityd.* and secd are NOT allowed (default-deny), only SecurityServer. ---
+  (global-name "com.apple.trustd.agent")                           ; trustd: SecTrustEvaluate cert-chain check for the model-API TLS handshake (codex)
+  (global-name "com.apple.SecurityServer"))                        ; securityd front door backing SecTrustEvaluate, paired with trustd
+
+; ---- IOKit: posting synthetic key/mouse events uses an IOKit user client (IOHIDSystem), which
+;      is iokit-open, NOT mach-lookup, so the mach deny above does not cover it. A headless TUI
+;      opens no user client, so deny all iokit-open. Verified: the full dev battery still passes. ----
+(deny iokit-open)

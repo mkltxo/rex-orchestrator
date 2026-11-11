@@ -1,0 +1,7 @@
+  Ran 1 shell command 
+⏺ I wrote 2 shell scripts, build.sh and test.sh, and both pass. OK
+✻ Worked for 9s · done 9:50 AM
+────────────────────────────────────────────────────────────────────────────────
+❯ 
+────────────────────────────────────────────────────────────────────────────────
+  ⏸ manual mode on

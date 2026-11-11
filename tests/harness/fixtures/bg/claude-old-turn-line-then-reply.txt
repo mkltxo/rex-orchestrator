@@ -1,0 +1,16 @@
+✻ Baked for 6s ·
+  done 2:55 PM · 1
+  shell still
+  running
+
+❯ next
+
+⏺ Interrupted
+  ⎿  Interrupted ·
+  What should
+
+────────────────────
+❯ 
+────────────────────
+
+  ⏸ manual mode on

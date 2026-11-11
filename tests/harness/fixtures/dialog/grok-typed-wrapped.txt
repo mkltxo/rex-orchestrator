@@ -1,0 +1,23 @@
+
+  /p/t/rx-probe/grok                                 1.3K / 256K │ [Dashboard]
+
+
+
+
+
+
+
+
+
+
+
+
+   Tight on space? Try /compact-mode
+
+  ╭──────────────────────────────────────────────────────────────────────────╮
+  │ ❯ Create the file /private/tmp/rx-probe/grok/t1.txt whose entire content │
+  │   is the string ALPHA-grok (no trailing period, no newline). Then reply  │
+  │   OK.                                                                    │
+  ╰─────────────────────────────────────── Grok 4.7 (high) · always-approve ─╯
+
+  Enter:send  │  Shift+Enter/Opt+Enter:newline  │  Shift+Tab:mode  │  Ctrl+.:

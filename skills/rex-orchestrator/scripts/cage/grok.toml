@@ -1,0 +1,44 @@
+# rex-orchestrator cage: grok GROK_HOME/config.toml template. Copied into the cage home at
+# launch. With HOME pointed at the cage home, nothing under ~/.grok, ~/.claude, ~/.cursor
+# or ~/.codex is discovered (skills, plugins, hooks, MCP, permissions, trust). No secrets.
+[ui]
+permission_mode = "always-approve"
+
+[cli]
+auto_update = false
+use_leader = false
+show_tips = false
+
+[features]
+non_git_warning = false
+
+[memory_v2]
+enabled = false
+
+[marketplace]
+official_marketplace_auto_installed = true
+default_skills_installs_purged = true
+
+[compat.claude]
+skills = false
+rules = false
+agents = false
+mcps = false
+hooks = false
+sessions = false
+
+[compat.cursor]
+skills = false
+rules = false
+agents = false
+mcps = false
+hooks = false
+sessions = false
+
+[compat.codex]
+skills = false
+hooks = false
+sessions = false
+
+[privacy]
+privacy_banner_acked = "2026-11-01T00:00:00Z"

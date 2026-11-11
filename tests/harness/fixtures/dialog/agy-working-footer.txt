@@ -1,0 +1,8 @@
+> Do not use any tools. Write a numbered list of 70 different animals, one per
+  line, each with a one-sentence fact. Then stop.
+⣯  Generating...
+────────────────────────────────────────────────────────────────────────────────
+>
+────────────────────────────────────────────────────────────────────────────────
+esc to cancel                                            Gemini 4 Argon · medium
+agy ctx 0% · quota 0% · 7d 0% · quota 1.57% · 7d 0.58%

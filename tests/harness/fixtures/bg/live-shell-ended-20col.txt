@@ -1,0 +1,9 @@
+  the file to check
+  its contents.
+✻ Baked for 2s ·
+  done 2:57 PM
+────────────────────
+❯ cat bg.txt
+────────────────────
+  ⏸ manual mode on
+

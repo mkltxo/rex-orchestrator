@@ -1,0 +1,16 @@
+#!/usr/bin/env -S python3 -I -S
+# Virtual-clock sleep: advances $FAKE_REX_DIR/clock by the requested seconds, really sleeps seconds*FAKE_SLEEP_SCALE.
+# Fails (rc 1) while $FAKE_REX_DIR/sleep_fail exists.
+import fcntl, os, sys, time
+secs = float(sys.argv[1]) if len(sys.argv) > 1 else 0.0
+d = os.environ["FAKE_REX_DIR"]
+if os.path.exists(os.path.join(d, "sleep_fail")):
+    sys.exit(1)  # a scenario's errexit: the script's next plain sleep fails
+with open(os.path.join(d, "clock.lock"), "w") as lk:
+    fcntl.flock(lk, fcntl.LOCK_EX)
+    p = os.path.join(d, "clock")
+    now = float(open(p).read()) if os.path.exists(p) else 1800000000.0
+    # Replaced whole, never rewritten in place: date and the fake rex read it without the lock.
+    open(p + ".new", "w").write(repr(now + secs))
+    os.replace(p + ".new", p)
+time.sleep(secs * float(os.environ.get("FAKE_SLEEP_SCALE", "0.02")))

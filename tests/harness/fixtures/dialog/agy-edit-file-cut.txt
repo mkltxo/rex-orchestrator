@@ -1,0 +1,15 @@
+Pending edit
+────────────────────────────────────────────────────────────────────────────────
+
+/private/tmp/claude-501/-Users-alice/00000000-0000-4000-8000-000000000000/scratc
+  1  -  OLD
+  1  +  NEW
+
+  shift+tab to auto-approve file edits
+Accept this file edit?
+> 1. Yes, accept this change
+  2. No, reject this change
+
+  ↑/↓ Navigate · tab Amend · f full diff
+esc to cancel                                            Gemini 4 Argon · medium
+agy ctx 0.98% · quota 0% · 7d 0% · quota 0.02% · 7d 0.38%
