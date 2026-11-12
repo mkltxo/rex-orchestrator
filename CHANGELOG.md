@@ -21,4 +21,4 @@ First public release.
 ### Credits
 - Based on the MIT-licensed `rex-claude` skill from [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates).
 
-[0.1.0]: https://github.com/mikelaizpurua/rex-orchestrator/releases/tag/v0.1.0
+[0.1.0]: https://github.com/mkltxo/rex-orchestrator/releases/tag/v0.1.0

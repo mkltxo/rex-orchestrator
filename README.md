@@ -46,7 +46,7 @@ glue an agent needs to delegate reliably:
 ## Install
 
 ```sh
-git clone https://github.com/mikelaizpurua/rex-orchestrator.git
+git clone https://github.com/mkltxo/rex-orchestrator.git
 cd rex-orchestrator
 ./install.sh                 # CLI into ~/.local/bin + skill for Claude Code and ~/.agents/skills
 ./install.sh --help          # pick agents, a prefix, or a custom skills folder
