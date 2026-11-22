@@ -70,8 +70,9 @@ link() {
     return 1
   fi
   if [ "$dry" = 1 ]; then echo "would link $dest -> $src"; return 0; fi
-  mkdir -p "$(dirname "$dest")"
-  ln -s "$src" "$dest"
+  # link runs on the left of ||, where set -e does not apply: check each step, or a failed ln reads as linked.
+  mkdir -p "$(dirname "$dest")" || return 1
+  ln -s "$src" "$dest" || return 1
   echo "linked     $dest -> $src"
 }
 

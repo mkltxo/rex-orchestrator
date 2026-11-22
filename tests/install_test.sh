@@ -37,5 +37,11 @@ mkdir -p "$T/custom"
 inst --agents none --skills-dir "$T/custom" >/dev/null 2>&1 || true
 check "--skills-dir links the skill" "$ROOT/skills/rex-orchestrator" "$(readlink "$T/custom/rex-orchestrator")"
 
+mkdir -p "$T/ro" && chmod 555 "$T/ro"
+out=$(inst --agents none --bin-dir "$T/ro" 2>/dev/null); rc=$?
+chmod 755 "$T/ro"
+check "a link that cannot be made exits 1" 1 "$rc"
+check "a link that cannot be made is not reported as linked" 0 "$(printf '%s\n' "$out" | grep -c '^linked')"
+
 printf 'install_test: %d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" = 0 ]
