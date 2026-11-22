@@ -20,6 +20,7 @@ inst >/dev/null
 check "install creates 3 links" 3 "$(links)"
 check "CLI link target" "$ROOT/skills/rex-orchestrator/scripts/rex-orchestrator.sh" "$(readlink "$T/.local/bin/rex-orchestrator")"
 check "claude skill link" "$ROOT/skills/rex-orchestrator" "$(readlink "$T/.claude/skills/rex-orchestrator")"
+check "CLI is executable through its link" yes "$([ -x "$T/.local/bin/rex-orchestrator" ] && echo yes)"
 check "re-install is idempotent" 3 "$(inst | grep -c '^ok')"
 
 check "uninstall removes 3 links" 3 "$(inst --uninstall | grep -c removed)"
